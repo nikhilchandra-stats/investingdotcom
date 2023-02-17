@@ -37,7 +37,7 @@ table_extracted <- html_read %>%
 
 cleaned_table <- clean_fx_street_spread_sheet(
                             data = table_extracted[,1:9], 
-                             year_value = "2022")
+                             year_value = "2023")
 
 driver$client$closeall()
 
@@ -52,4 +52,7 @@ remove_duplicates <- latest_data_new %>%
 new_data_for_upload <- remove_duplicates %>% 
   bind_rows(previous_latest_data %>% mutate(time = as.character(time)))
 
-write.csv(latest_data_new, "data_for_upload/daily_fx_macro_data.csv", row.names = F)
+write.csv(new_data_for_upload, "data_for_upload/daily_fx_macro_data.csv", row.names = F)
+write.csv(previous_latest_data, 
+          glue::glue("archived_data/daily_fx_macro_data_{lubridate::today() %>% format('%Y_%m_%d')}.csv"), 
+          row.names = F)
