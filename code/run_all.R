@@ -38,6 +38,7 @@ table_extracted <- html_read %>%
 cleaned_table_2023 <- clean_fx_street_spread_sheet(
                             data = table_extracted[,1:9], 
                              year_value = "2023", year_filter_string = "January|February")
+
 cleaned_table_2024 <- clean_fx_street_spread_sheet(
   data = table_extracted[,1:9], 
   year_value = "2024", year_filter_string = "April|May|June|July|August|November|October|December")
