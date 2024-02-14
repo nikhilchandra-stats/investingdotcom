@@ -35,9 +35,14 @@ table_extracted <- html_read %>%
   rvest::html_table() %>%
   pluck(1)
 
-cleaned_table <- clean_fx_street_spread_sheet(
+cleaned_table_2023 <- clean_fx_street_spread_sheet(
                             data = table_extracted[,1:9], 
-                             year_value = "2023")
+                             year_value = "2023", year_filter_string = "January|February")
+cleaned_table_2024 <- clean_fx_street_spread_sheet(
+  data = table_extracted[,1:9], 
+  year_value = "2024", year_filter_string = "April|May|June|July|August|November|October|December")
+
+cleaned_table <- cleaned_table_2023 %>% bind_rows(cleaned_table_2024)
 
 driver$client$closeall()
 

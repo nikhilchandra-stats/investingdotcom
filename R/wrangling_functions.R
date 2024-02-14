@@ -65,7 +65,8 @@ clean_fx_spread_prelim <- function(path = file_tibble$file_path[27]) {
 }
 
 clean_fx_street_spread_sheet <- function(data,
-                                         year_value){
+                                         year_value, 
+                                         year_filter_string = "January|February"){
   
   
   
@@ -85,6 +86,7 @@ clean_fx_street_spread_sheet <- function(data,
     mutate(day_value = str_remove_all(string = .data$date, pattern = "[a-z]") %>% 
              str_remove_all(pattern = "[A-Z]") %>% str_remove_all(",") %>% str_trim()) %>% 
     mutate(day_value = ifelse(nchar(.data$day_value) < 2, paste0("0",.data$day_value), .data$day_value)) %>%
+    filter(!str_detect(date, year_filter_string)) %>%
     mutate(
       date_time = lubridate::as_datetime(glue::glue("{year_value}-{convert_month(date)}-{day_value} {time}:00 GMT"), tz="GMT")
     ) %>%
