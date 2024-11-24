@@ -3,7 +3,7 @@ library(RSelenium)
 
 
 # driver <- RSelenium::rsDriver(chromever = "101.0.4951.15", port = 4566L)
-driver <- RSelenium::rsDriver(browser = "firefox", port = 4569L, chromever = "108.0.5359.71" )
+driver <- RSelenium::rsDriver(browser = "firefox", port = 5111L, chromever = "108.0.5359.71" )
 
 urlx <- "https://www.dukascopy.com/plugins/fxMarketWatch/?economic_calendar"
 url_daily <- "https://www.fxstreet.com/economic-calendar"
@@ -23,7 +23,12 @@ download.file(url = "https://raw.githubusercontent.com/nikhilchandra-stats/macro
 latest_data <- fs::dir_info("data/") %>% 
   slice_max(modification_time) %>% 
   pull(path) %>% 
-  read_csv()
+  read_csv() 
+
+latest_date <- latest_data %>% 
+  filter(!is.na(actual)) %>% 
+  slice_max(date) %>% 
+  pull(date) 
 
 page_source <- driver$client$getPageSource()
 
@@ -37,7 +42,7 @@ table_extracted <- html_read %>%
 
 cleaned_table <- clean_fx_street_spread_sheet(
                             data = table_extracted[,1:9], 
-                             year_value = "2023")
+                             year_value = "2024")
 
 driver$client$closeall()
 
