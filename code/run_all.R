@@ -42,7 +42,7 @@ table_extracted <- html_read %>%
 
 cleaned_table <- clean_fx_street_spread_sheet(
                             data = table_extracted[,1:9], 
-                             year_value = "2024")
+                             year_value = "2025")
 
 driver$client$closeall()
 
@@ -61,3 +61,5 @@ write.csv(new_data_for_upload, "data_for_upload/daily_fx_macro_data.csv", row.na
 write.csv(previous_latest_data, 
           glue::glue("archived_data/daily_fx_macro_data_{lubridate::today() %>% format('%Y_%m_%d')}.csv"), 
           row.names = F)
+
+gc()
