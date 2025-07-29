@@ -50,15 +50,29 @@ cleaned_table <- clean_fx_street_spread_sheet(
 driver$client$closeall()
 
 latest_data_new <- cleaned_table %>% 
-  distinct()
+  distinct() %>% 
+  mutate(
+    time =
+      case_when(
+        nchar(time) < 6 ~ str_trim(glue::glue("{time}:00")) ,
+        TRUE ~ time
+      )
+  )
 
 previous_latest_data <- latest_data
 
 remove_duplicates <- latest_data_new %>% 
-  anti_join(previous_latest_data %>% mutate(time = as.character(time)))
+  anti_join(previous_latest_data %>% mutate(time = as.character(time))) 
 
 new_data_for_upload <- remove_duplicates %>% 
-  bind_rows(previous_latest_data %>% mutate(time = as.character(time)))
+  bind_rows(previous_latest_data %>% mutate(time = as.character(time)) ) %>% 
+  distinct() %>% 
+  group_by(date, symbol, event, actual, deviation, consensus, previous) %>% 
+  slice_max(date_time)
+
+
+test <- anti_join(previous_latest_data %>% mutate(time = as.character(time)), 
+                  new_data_for_upload%>% mutate(time = as.character(time)))
 
 write.csv(new_data_for_upload, "data_for_upload/daily_fx_macro_data.csv", row.names = F)
 write.csv(previous_latest_data, 
