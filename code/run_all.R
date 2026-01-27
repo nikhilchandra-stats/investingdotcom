@@ -45,7 +45,7 @@ table_extracted <- html_read %>%
 
 cleaned_table <- clean_fx_street_spread_sheet(
                             data = table_extracted[,1:9], 
-                             year_value = "2025")
+                             year_value = "2026")
 
 driver$client$closeall()
 
@@ -71,8 +71,8 @@ new_data_for_upload <- remove_duplicates %>%
   slice_max(date_time)
 
 
-test <- anti_join(previous_latest_data %>% mutate(time = as.character(time)), 
-                  new_data_for_upload%>% mutate(time = as.character(time)))
+# test <- anti_join(previous_latest_data %>% mutate(time = as.character(time)), 
+#                   new_data_for_upload%>% mutate(time = as.character(time)))
 
 write.csv(new_data_for_upload, "data_for_upload/daily_fx_macro_data.csv", row.names = F)
 write.csv(previous_latest_data, 
@@ -80,3 +80,4 @@ write.csv(previous_latest_data,
           row.names = F)
 
 gc()
+
